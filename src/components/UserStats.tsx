@@ -27,7 +27,7 @@ const UserStats = ({ user }: UserStatsProps) => {
       <div className="space-y-4 max-h-[200px] overflow-y-auto">
         {user.referredUsers && user.referredUsers.length > 0 ? (
           user.referredUsers.map((friend, index) => (
-            <div key={index} className="flex items-center space-x-3">
+            <div key={friend.id} className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
                 {friend.photoUrl ? (
                   <img src={friend.photoUrl} alt={friend.firstName} className="w-full h-full object-cover" />

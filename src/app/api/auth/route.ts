@@ -105,6 +105,7 @@ export async function POST(req: NextRequest) {
     }
     
     // Check if user is admin
+    console.log('Checking if user is admin. User telegramId:', user.telegramId, 'ADMIN_TELEGRAM_ID:', process.env.ADMIN_TELEGRAM_ID);
     const isAdmin = user.telegramId === process.env.ADMIN_TELEGRAM_ID;
     
     if (isAdmin && !user.isAdmin) {

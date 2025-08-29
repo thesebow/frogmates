@@ -29,7 +29,11 @@ export async function GET(req: NextRequest) {
             specialId: true,
             stars: true,
             isPremium: true,
-            isVerified: true
+            isVerified: true,
+            createdAt: true
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
         }
       }

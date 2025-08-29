@@ -41,15 +41,20 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
   const fetchStats = async () => {
     try {
       console.log('Fetching stats with token:', token);
+      console.log('Token length:', token.length);
+
       const response = await fetch('/api/admin/stats', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
+      console.log('Stats response status:', response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch admin stats');
+        const errorText = await response.text();
+        console.log('Stats error response:', errorText);
+        throw new Error(`Failed to fetch admin stats: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -71,9 +76,12 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
         },
       });
 
+      console.log('Users response status:', response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch users');
+        const errorText = await response.text();
+        console.log('Users error response:', errorText);
+        throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -213,33 +221,9 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
         </div>
 
         <div className="mb-6">
-          <h3 className="text-white text-lg font-bold mb-3">Bulk Actions</h3>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => handleBulkAction('block-all-cheaters')}
-              className="bg-red-500 text-white py-2 px-3 rounded-lg text-sm"
-            >
-              Block All Cheaters
-            </button>
-            <button
-              onClick={() => handleBulkAction('unblock-all')}
-              className="bg-green-500 text-white py-2 px-3 rounded-lg text-sm"
-            >
-              Unblock All
-            </button>
-            <button
-              onClick={() => handleBulkAction('mark-multiple-ips-as-cheaters')}
-              className="bg-yellow-500 text-white py-2 px-3 rounded-lg text-sm"
-            >
-              Mark Multiple IPs as Cheaters
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-white text-lg font-bold">Users</h3>
-            <div className="flex items-center space-x-2">
+          <h3 className="text-white text-lg font-bold mb-3">Users</h3>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0 mb-4">
+            <div className="flex space-x-2">
               <input
                 type="text"
                 placeholder="Search users..."
@@ -328,41 +312,90 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
                           </button>
                         )}
 
-                        <button
-                          onClick={() => handleUserAction(user.id, 'reset-stars')}
-                          className="bg-purple-500 text-white py-1 px-2 rounded text-xs"
-                        >
-                          Reset Stars
-                        </button>
+                        {user.isCheater ? (
+                          <button
+                            onClick={() => handleUserAction(user.id, 'unmark-as-cheater')}
+                            className="bg-green-500 text-white py-1 px-2 rounded text-xs"
+                          >
+                            Not Cheater
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleUserAction(user.id, 'mark-as-cheater')}
+                            className="bg-orange-500 text-white py-1 px-2 rounded text-xs"
+                          >
+                            Cheater
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {users.length === 0 && (
-                <p className="text-white text-center py-4">No users found</p>
+              {totalPages > 1 && (
+                <div className="flex justify-center space-x-2 mt-4">
+                  <button
+                    onClick={() => setPage(page > 1 ? page - 1 : 1)}
+                    className="bg-[#2C2C2E] text-white px-3 py-1 rounded"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-white px-3 py-1">
+                    Page {page} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setPage(page < totalPages ? page + 1 : totalPages)}
+                    className="bg-[#2C2C2E] text-white px-3 py-1 rounded"
+                  >
+                    Next
+                  </button>
+                </div>
               )}
-
-              <div className="flex justify-between items-center mt-4">
-                <button
-                  onClick={() => setPage(Math.max(1, page - 1))}
-                  disabled={page === 1}
-                  className={`bg-[#2C2C2E] text-white py-2 px-3 rounded-lg ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  Previous
-                </button>
-                <span className="text-white">Page {page} of {totalPages}</span>
-                <button
-                  onClick={() => setPage(Math.min(totalPages, page + 1))}
-                  disabled={page === totalPages}
-                  className={`bg-[#2C2C2E] text-white py-2 px-3 rounded-lg ${page === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  Next
-                </button>
-              </div>
             </>
           )}
+        </div>
+
+        <div className="mb-6">
+          <h3 className="text-white text-lg font-bold mb-3">Bulk Actions</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => handleBulkAction('verify-all')}
+              className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Verify All
+            </button>
+            <button
+              onClick={() => handleBulkAction('unverify-all')}
+              className="bg-yellow-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Unverify All
+            </button>
+            <button
+              onClick={() => handleBulkAction('block-all')}
+              className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Block All
+            </button>
+            <button
+              onClick={() => handleBulkAction('unblock-all')}
+              className="bg-green-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Unblock All
+            </button>
+            <button
+              onClick={() => handleBulkAction('reset-referrals')}
+              className="bg-purple-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Reset All Referrals
+            </button>
+            <button
+              onClick={() => handleBulkAction('reset-stars')}
+              className="bg-indigo-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Reset All Stars
+            </button>
+          </div>
         </div>
       </div>
     </div>

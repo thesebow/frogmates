@@ -22,12 +22,12 @@ const UserProfile = ({ user }: UserProfileProps) => {
             style={{ backgroundImage: 'url(https://cdn.frogmates.suno.uz/uploads/frogmates/home-page/eGxI16XtAJ02UUoYKrL1SThPpSjmFImAHiKAXfG8ueqMLlj7Yr.svg)' }}
           />
         )}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 rounded-full px-2 py-1">
-          <p className="text-white text-xs font-medium">ID {user.specialId}</p>
+        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 rounded-full px-2 py-1 text-xs">
+          <span className="text-white font-medium">ID {user.specialId}</span>
         </div>
       </div>
       
-      <div className="flex items-center space-x-1 mb-4">
+      <div className="flex items-center space-x-1 mb-4 mt-4">
         <h1 className="text-white text-xl font-bold">{user.firstName}</h1>
         {user.isVerified && (
           <div 

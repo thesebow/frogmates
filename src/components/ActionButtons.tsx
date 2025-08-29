@@ -61,7 +61,7 @@ const ActionButtons = ({ user, onJoinChannel, isAdmin }: ActionButtonsProps) => 
         </button>
         <button
           onClick={copyReferralLink}
-          className="bg-[#2C2C2E] p-3 rounded-lg relative"
+          className="bg-white text-black p-3 rounded-lg relative"
         >
           <div
             className="w-6 h-6 bg-no-repeat bg-center bg-contain"

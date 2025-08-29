@@ -66,11 +66,21 @@ const AppContent = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen text-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-4">
+    <div className="bg-black min-h-screen text-white pb-6 px-4" 
+      style={{
+        paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)", 
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)"
+      }}>
       <Header user={user} />
-      <UserProfile user={user} />
-      <UserStats user={user} />
-      <ActionButtons user={user} onJoinChannel={handleJoinChannel} isAdmin={user.isAdmin} />
+      <div className="mt-4">
+        <UserProfile user={user} />
+      </div>
+      <div className="mt-6">
+        <UserStats user={user} />
+      </div>
+      <div className="mt-4">
+        <ActionButtons user={user} onJoinChannel={handleJoinChannel} isAdmin={user.isAdmin} />
+      </div>
 
       {showAdminPanel && (
         <AdminPanel
