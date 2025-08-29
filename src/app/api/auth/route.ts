@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { 
-  validateTelegramWebAppData, 
-  parseTelegramInitData, 
-  generateSpecialId, 
+import {
+  checkIfCheater,
+  generateSpecialId,
   generateToken,
-  checkIfCheater
+  parseTelegramInitData,
+  validateTelegramWebAppData
 } from '@/utils';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -104,16 +104,17 @@ export async function POST(req: NextRequest) {
       });
     }
     
-    // Check if user is admin
-    console.log('Checking if user is admin. User telegramId:', user.telegramId, 'ADMIN_TELEGRAM_ID:', process.env.ADMIN_TELEGRAM_ID);
-    const isAdmin = user.telegramId === process.env.ADMIN_TELEGRAM_ID;
+    // Check if user is admin (using a secure comparison)
+    const adminIds = process.env.ADMIN_TELEGRAM_IDS?.split(',') || [];
+    const isAdmin = adminIds.includes(user.telegramId);
     
     if (isAdmin && !user.isAdmin) {
       user = await prisma.user.update({
         where: { id: user.id },
         data: { 
           isAdmin: true,
-          isVerified: true
+          isVerified: true,
+          lastAdminCheck: new Date()
         }
       });
     }

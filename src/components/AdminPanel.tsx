@@ -185,13 +185,13 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      <div className="bg-[#1C1C1E] rounded-lg p-4 w-full max-h-[90vh] overflow-y-auto mx-4 my-2">
-        <div className="flex justify-between items-center mb-6 sticky top-0 bg-[#1C1C1E] z-10 py-2">
-          <h2 className="text-white text-xl font-bold">Admin Dashboard</h2>
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      <div className="bg-[#1C1C1E] rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto mx-4 my-2 shadow-2xl">
+        <div className="flex justify-between items-center mb-6 sticky top-0 bg-[#1C1C1E]/95 backdrop-blur-sm z-10 py-2">
+          <h2 className="text-white text-2xl font-bold">Admin Dashboard</h2>
           <button
             onClick={onClose}
-            className="text-white bg-[#2C2C2E] h-8 w-8 rounded-full flex items-center justify-center"
+            className="text-white bg-[#2C2C2E] hover:bg-[#3C3C3E] transition-colors h-10 w-10 rounded-full flex items-center justify-center"
           >
             ✕
           </button>
@@ -204,15 +204,15 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
         )}
 
         <div className="mb-6">
-          <h3 className="text-white text-lg font-bold mb-3">Statistics</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-[#2C2C2E] p-3 rounded-lg">
-              <p className="text-gray-400 text-sm">Total Users</p>
-              <p className="text-white font-bold">{stats.totalUsers}</p>
+          <h3 className="text-white text-xl font-bold mb-4">Statistics</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-[#2C2C2E] to-[#1C1C1E] p-4 rounded-xl border border-[#3C3C3E] hover:border-blue-500/50 transition-colors">
+              <p className="text-gray-400 text-sm mb-1">Total Users</p>
+              <p className="text-white text-2xl font-bold">{stats.totalUsers}</p>
             </div>
-            <div className="bg-[#2C2C2E] p-3 rounded-lg">
-              <p className="text-gray-400 text-sm">Active Users</p>
-              <p className="text-white font-bold">{stats.activeUsers}</p>
+            <div className="bg-gradient-to-br from-[#2C2C2E] to-[#1C1C1E] p-4 rounded-xl border border-[#3C3C3E] hover:border-green-500/50 transition-colors">
+              <p className="text-gray-400 text-sm mb-1">Active Users</p>
+              <p className="text-white text-2xl font-bold">{stats.activeUsers}</p>
             </div>
             <div className="bg-[#2C2C2E] p-3 rounded-lg">
               <p className="text-gray-400 text-sm">Premium Users</p>
@@ -243,19 +243,19 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
 
         <div className="mb-6">
           <h3 className="text-white text-lg font-bold mb-3">Users</h3>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0 mb-4">
-            <div className="flex space-x-2">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0 mb-6">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
               <input
                 type="text"
-                placeholder="Search users..."
+                placeholder="Search users by name, username, or ID..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-[#2C2C2E] text-white px-3 py-2 rounded-lg text-sm w-40 sm:w-60"
+                className="bg-[#2C2C2E] text-white px-4 py-2.5 rounded-lg text-sm w-full sm:w-80 border border-[#3C3C3E] focus:border-blue-500 focus:outline-none transition-colors"
               />
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="bg-[#2C2C2E] text-white px-3 py-2 rounded-lg text-sm"
+                className="bg-[#2C2C2E] text-white px-4 py-2.5 rounded-lg text-sm border border-[#3C3C3E] focus:border-blue-500 focus:outline-none transition-colors cursor-pointer"
               >
                 <option value="all">All</option>
                 <option value="premium">Premium</option>
