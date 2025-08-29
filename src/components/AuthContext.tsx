@@ -99,6 +99,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const refreshUserData = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       const token = localStorage.getItem('token');
 
@@ -111,6 +112,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
+      }).catch(error => {
+        console.error('Network error:', error);
+        throw new Error('Network connection failed. Please check your internet connection.');
       });
 
       if (!response.ok) {

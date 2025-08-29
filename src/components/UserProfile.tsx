@@ -1,7 +1,6 @@
 'use client';
 
 import { UserData } from '@/types';
-import TonConnectUI from './TonConnectUI';
 
 interface UserProfileProps {
   user: UserData;

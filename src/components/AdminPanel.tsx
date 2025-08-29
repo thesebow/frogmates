@@ -164,19 +164,33 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
     }
   };
 
-  if (!stats) {
+  if (!stats || loading) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-        <div className="bg-[#1C1C1E] rounded-lg p-4 w-full max-w-lg mx-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-white text-xl font-bold">Admin Dashboard</h2>
-            <button onClick={onClose} className="text-white">
-              ✕
+      <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+        <div className="bg-[#1C1C1E] rounded-xl p-6 w-full max-w-lg mx-4 shadow-2xl border border-gray-800">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-white text-2xl font-bold">Admin Dashboard</h2>
+            <button 
+              onClick={onClose} 
+              className="bg-[#2C2C2E] hover:bg-[#3C3C3E] transition-colors rounded-full p-2"
+            >
+              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
           <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white mb-4"></div>
-            <p className="text-white">Loading admin data...</p>
+            <div className="relative">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500/20">
+                <div className="border-t-4 border-blue-500 rounded-full h-12 w-12 absolute inset-0"></div>
+              </div>
+            </div>
+            <p className="text-gray-400 mt-4 text-lg">Loading admin data...</p>
+            {error && (
+              <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <p className="text-red-500 text-center">{error}</p>
+              </div>
+            )}
             {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
           </div>
         </div>

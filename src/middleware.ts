@@ -20,13 +20,33 @@ export function middleware(req: NextRequest) {
   }
 
   // Check for auth token
-  const token = req.headers.get('Authorization')?.split(' ')[1];
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return NextResponse.json(
+      { error: 'Invalid authentication header' },
+      { status: 401 }
+    );
+  }
 
+  const token = authHeader.split(' ')[1];
   if (!token) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { error: 'No token provided' },
+      { status: 401 }
+    );
   }
 
   const decoded = simpleVerifyToken(token);
+  
+  // Enhanced token validation for admin routes
+  if (req.nextUrl.pathname.startsWith('/api/admin')) {
+    if (!decoded) {
+      return NextResponse.json(
+        { error: 'Invalid or expired admin token' },
+        { status: 401 }
+      );
+    }
+  }
 
   if (!decoded) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

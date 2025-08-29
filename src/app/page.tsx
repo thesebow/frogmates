@@ -45,9 +45,19 @@ const AppContent = () => {
   // Update token when user changes
   useEffect(() => {
     if (user) {
-      const storedToken = localStorage.getItem('token') || '';
-      setToken(storedToken);
-      console.log('Token updated:', storedToken);
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+        // Verify token validity
+        fetch('/api/user', {
+          headers: {
+            'Authorization': `Bearer ${storedToken}`
+          }
+        }).catch(() => {
+          localStorage.removeItem('token');
+          setToken('');
+        });
+      }
     }
   }, [user]);
 
