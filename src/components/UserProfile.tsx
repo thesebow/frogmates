@@ -9,8 +9,6 @@ interface UserProfileProps {
 
 const UserProfile = ({ user }: UserProfileProps) => {
   return (
-    const UserProfile = ({ user }: UserProfileProps) => {
-  return (
     <div className="flex flex-col items-center sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
       <div className="relative">
         {user.photoUrl ? (
@@ -54,7 +52,6 @@ const UserProfile = ({ user }: UserProfileProps) => {
         <p className="text-gray-400 text-sm mt-1">ID: {user.specialId}</p>
       </div>
     </div>
-  );
   );
 };
 
