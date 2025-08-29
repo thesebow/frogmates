@@ -48,23 +48,22 @@ const AppContent = () => {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         setToken(storedToken);
-        // Verify token validity
-        fetch('/api/user', {
-          headers: {
-            'Authorization': `Bearer ${storedToken}`
-          }
-        }).catch(() => {
-          localStorage.removeItem('token');
-          setToken('');
-        });
+        console.log('Token set:', storedToken.substring(0, 20) + '...');
+        console.log('User isAdmin:', user.isAdmin);
       }
     }
   }, [user]);
 
   const handleJoinChannel = async () => {
+    console.log('handleJoinChannel called');
+    console.log('User isAdmin:', user?.isAdmin);
+    console.log('Token available:', !!token);
+
     if (user?.isAdmin) {
+      console.log('Opening admin panel...');
       setShowAdminPanel(true);
     } else {
+      console.log('Joining channel...');
       await joinChannel();
     }
   };
@@ -118,7 +117,7 @@ const AppContent = () => {
         paddingTop: "calc(env(safe-area-inset-top, 0px) + 80px)",
         paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 50px)"
       }}>
-      
+
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -148,8 +147,17 @@ const AppContent = () => {
         </div>
       </div>
 
+      {/* Debug Info (only in development) */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed bottom-4 right-4 bg-black/80 p-4 rounded-lg text-xs">
+          <p>Admin: {user.isAdmin ? 'Yes' : 'No'}</p>
+          <p>Token: {token ? 'Available' : 'Missing'}</p>
+          <p>User ID: {user.id}</p>
+        </div>
+      )}
+
       {/* Admin Panel Modal */}
-      {showAdminPanel && (
+      {showAdminPanel && token && (
         <AdminPanel
           token={token}
           onClose={() => setShowAdminPanel(false)}
