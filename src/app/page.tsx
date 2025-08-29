@@ -76,20 +76,24 @@ const AppContent = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen text-white pb-6 px-4"
+    <div className="relative min-h-screen text-white"
       style={{
-        paddingTop: "calc(env(safe-area-inset-top, 0px) + 100px)",
+        paddingTop: "calc(env(safe-area-inset-top, 0px) + 80px)",
         paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 50px)"
       }}>
-      <Header user={user} />
-      <div className="mt-4">
-        <UserProfile user={user} />
+      <div className="fixed top-0 left-0 right-0 z-10 bg-gradient-to-b from-black to-transparent pt-[env(safe-area-inset-top, 0px)]">
+        <Header user={user} />
       </div>
-      <div className="mt-6">
-        <UserStats user={user} />
-      </div>
-      <div className="mt-4">
-        <ActionButtons user={user} onJoinChannel={handleJoinChannel} isAdmin={user.isAdmin} />
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="bg-[#1C1C1E]/80 backdrop-blur-md rounded-2xl p-6 shadow-xl">
+          <UserProfile user={user} />
+        </div>
+        <div className="bg-[#1C1C1E]/80 backdrop-blur-md rounded-2xl p-6 shadow-xl">
+          <UserStats user={user} />
+        </div>
+        <div className="bg-[#1C1C1E]/80 backdrop-blur-md rounded-2xl p-6 shadow-xl">
+          <ActionButtons user={user} onJoinChannel={handleJoinChannel} isAdmin={user.isAdmin} />
+        </div>
       </div>
 
       {showAdminPanel && (
