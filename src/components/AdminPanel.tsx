@@ -30,6 +30,13 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
+    // Check if token exists
+    if (!token || token.length === 0) {
+      setError('No authentication token provided');
+      setLoading(false);
+      return;
+    }
+
     fetchStats();
     fetchUsers();
   }, []);
@@ -40,21 +47,27 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
 
   const fetchStats = async () => {
     try {
-      console.log('Fetching stats with token:', token);
-      console.log('Token length:', token.length);
-
       const response = await fetch('/api/admin/stats', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      console.log('Stats response status:', response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.log('Stats error response:', errorText);
-        throw new Error(`Failed to fetch admin stats: ${response.status} ${response.statusText}`);
+
+        // Try to parse the error for better debugging
+        let errorMessage = `Failed to fetch admin stats: ${response.status} ${response.statusText}`;
+        if (errorText) {
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage += ` - ${errorData.error || errorText}`;
+          } catch (e) {
+            errorMessage += ` - ${errorText}`;
+          }
+        }
+
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -68,7 +81,6 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      console.log('Fetching users with token:', token);
 
       const response = await fetch(`/api/admin/users?page=${page}&filter=${filter}&search=${search}`, {
         headers: {
@@ -76,12 +88,21 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
         },
       });
 
-      console.log('Users response status:', response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.log('Users error response:', errorText);
-        throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`);
+
+        // Try to parse the error for better debugging
+        let errorMessage = `Failed to fetch users: ${response.status} ${response.statusText}`;
+        if (errorText) {
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage += ` - ${errorData.error || errorText}`;
+          } catch (e) {
+            errorMessage += ` - ${errorText}`;
+          }
+        }
+
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

@@ -80,6 +80,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       // Set user data
       setUser(data.user);
+
+      // Log admin status for debugging
+      console.log('User logged in. Is admin:', data.user.isAdmin);
     } catch (error: any) {
       setError(error.message || 'Authentication failed');
       console.error('Login error:', error);
@@ -124,6 +127,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       const data = await response.json();
       setUser(data.user);
+
+      // Log admin status for debugging
+      console.log('User data refreshed. Is admin:', data.user.isAdmin);
     } catch (error: any) {
       setError(error.message || 'Failed to fetch user data');
       console.error('Refresh user data error:', error);

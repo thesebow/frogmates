@@ -15,6 +15,7 @@ const AppContent = () => {
   const { user, loading, error, login, joinChannel } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [token, setToken] = useState<string>('');
 
   // Handle Telegram WebApp initialization
   useEffect(() => {
@@ -41,6 +42,15 @@ const AppContent = () => {
     return () => clearTimeout(timer);
   }, [login]);
 
+  // Update token when user changes
+  useEffect(() => {
+    if (user) {
+      const storedToken = localStorage.getItem('token') || '';
+      setToken(storedToken);
+      console.log('Token updated:', storedToken);
+    }
+  }, [user]);
+
   const handleJoinChannel = async () => {
     if (user?.isAdmin) {
       setShowAdminPanel(true);
@@ -66,10 +76,10 @@ const AppContent = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen text-white pb-6 px-4" 
+    <div className="bg-black min-h-screen text-white pb-6 px-4"
       style={{
-        paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)", 
-        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)"
+        paddingTop: "calc(env(safe-area-inset-top, 0px) + 100px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 50px)"
       }}>
       <Header user={user} />
       <div className="mt-4">
@@ -84,7 +94,7 @@ const AppContent = () => {
 
       {showAdminPanel && (
         <AdminPanel
-          token={localStorage.getItem('token') || ''}
+          token={token}
           onClose={() => setShowAdminPanel(false)}
         />
       )}
