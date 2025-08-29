@@ -22,7 +22,7 @@ model User {
   photoUrl        String?
   specialId       String    @unique
   referrals       Int       @default(0)
-  stars           Int       @default(5)
+  stars           Int       @default(0)
   isVerified      Boolean   @default(false)
   isAdmin         Boolean   @default(false)
   isCheater       Boolean   @default(false)

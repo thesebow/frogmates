@@ -66,7 +66,7 @@ const AppContent = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen p-4 text-white">
+    <div className="bg-black min-h-screen text-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-4">
       <Header user={user} />
       <UserProfile user={user} />
       <UserStats user={user} />

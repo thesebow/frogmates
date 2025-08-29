@@ -40,6 +40,7 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
 
   const fetchStats = async () => {
     try {
+      console.log('Fetching stats with token:', token);
       const response = await fetch('/api/admin/stats', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -47,7 +48,8 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch admin stats');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch admin stats');
       }
 
       const data = await response.json();
@@ -61,6 +63,7 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      console.log('Fetching users with token:', token);
 
       const response = await fetch(`/api/admin/users?page=${page}&filter=${filter}&search=${search}`, {
         headers: {
@@ -69,7 +72,8 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch users');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch users');
       }
 
       const data = await response.json();
@@ -133,25 +137,34 @@ const AdminPanel = ({ token, onClose }: AdminPanelProps) => {
 
   if (!stats) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
-        <div className="bg-[#1C1C1E] rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-          <h2 className="text-white text-xl font-bold mb-4">Admin Dashboard</h2>
-          <p className="text-white">Loading...</p>
+      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+        <div className="bg-[#1C1C1E] rounded-lg p-4 w-full max-w-lg mx-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white text-xl font-bold">Admin Dashboard</h2>
+            <button onClick={onClose} className="text-white">
+              ✕
+            </button>
+          </div>
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white mb-4"></div>
+            <p className="text-white">Loading admin data...</p>
+            {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
-      <div className="bg-[#1C1C1E] rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
+    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      <div className="bg-[#1C1C1E] rounded-lg p-4 w-full max-h-[90vh] overflow-y-auto mx-4 my-2">
+        <div className="flex justify-between items-center mb-6 sticky top-0 bg-[#1C1C1E] z-10 py-2">
           <h2 className="text-white text-xl font-bold">Admin Dashboard</h2>
           <button
             onClick={onClose}
-            className="text-white"
+            className="text-white bg-[#2C2C2E] h-8 w-8 rounded-full flex items-center justify-center"
           >
-            Close
+            ✕
           </button>
         </div>
 
